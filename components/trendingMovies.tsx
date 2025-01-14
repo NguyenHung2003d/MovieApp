@@ -3,6 +3,7 @@ import React from 'react';
 import Carousel from 'react-native-snap-carousel';
 import { useNavigation } from '@react-navigation/native';
 import tw from 'twrnc';
+import {image500} from "../api/moviedb";
 
 var { width, height } = Dimensions.get('window');
 
@@ -31,10 +32,12 @@ export default function TrendingMovies({ data }) {
 
 const MovieCard = ({ item, handleClick }) => {
     return (
+
         <TouchableWithoutFeedback onPress={() => handleClick(item)}>
             <View style={{ borderRadius: 24, overflow: 'hidden' }}>
                 <Image
-                    source={require('../assets/imageMovie/imagePoster1.jpg')}
+                    // source={require('../assets/imageMovie/imagePoster2.jpg')}
+                    source={{uri: image500(item.poster_path)}}
                     style={{
                         width: width * 0.6,
                         height: height * 0.4,

@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, Platform, SafeAreaView, StatusBar, TouchableOpacity, ScrollView } from 'react-native';
 import tw from 'twrnc';
 import { Bars3CenterLeftIcon, MagnifyingGlassIcon } from 'react-native-heroicons/mini';
 import { styles } from "../theme/theme";
 import TrendingMovies from "../components/trendingMovies";
 import MovieList from "../components/movieList";
+import {useNavigation} from "@react-navigation/native";
+import Loading from "../components/loading";
+import {fetchRatedMovies, fetchTrendingMovies, fetchUpcomingMovies} from "../api/moviedb";
 
 const ios = Platform.OS === 'ios';
 
@@ -12,6 +15,32 @@ const App: React.FC = () => {
     const [trending, setTrending] = useState([1, 2, 3]);
     const [upcoming, setUpcoming] = useState([1, 2, 3]);
     const [topRated, setTopRate] = useState([1, 2, 3]);
+    const navigation = useNavigation();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getTrendingMovies()
+        getUpComingMovies()
+        getTopRatedMovies()
+    }, []);
+
+    const getTrendingMovies = async () => {
+        const data = await fetchTrendingMovies();
+        if (data && data.results) setTrending(data.results);
+        setLoading(false);
+    }
+
+    const getUpComingMovies = async () => {
+        const data = await fetchUpcomingMovies();
+        if (data && data.results) setTrending(data.results);
+        setLoading(false);
+    }
+
+    const getTopRatedMovies = async () => {
+        const data = await fetchRatedMovies();
+        if (data && data.results) setTrending(data.results);
+        setLoading(false);
+    }
 
     return (
         <View style={tw`flex-1 bg-neutral-800`}>
@@ -22,16 +51,22 @@ const App: React.FC = () => {
                     <Text style={tw`text-white text-3xl font-bold`}>
                         <Text style={styles.text}>M</Text>ovies
                     </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Search')}>
                         <MagnifyingGlassIcon size={30} strokeWidth={2} color="white" />
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: 10 }}>
-                <TrendingMovies data={trending} />
-                <MovieList title="Trending Movies" data={upcoming} />
-                <MovieList title="Top Rated" data={topRated} />
-            </ScrollView>
+            {
+                loading ? (
+                    <Loading/>
+                ): (
+                    <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: 5 }}>
+                        {trending.length > 0 && <TrendingMovies data={trending} />}
+                        <MovieList title="Trending Movies" data={upcoming} />
+                        <MovieList title="Top Rated" data={topRated} />
+                    </ScrollView>
+                )
+            }
         </View>
     );
 };
