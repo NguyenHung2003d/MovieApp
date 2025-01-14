@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import tw from 'twrnc';
+import {image342} from "../api/moviedb";
 
 export default function Casts({ cast, navigation }) { // Destructure 'cast' from props
     let personName = 'Pedro Pascal';
@@ -24,17 +25,17 @@ export default function Casts({ cast, navigation }) { // Destructure 'cast' from
 
                                 <Image
                                     style={tw`rounded-2xl w-20 h-24`}
-                                    source={require('../assets/imageMovie/pedro pascal.png')}
+                                    source={{uri: image342(person?.profile_path)}}
                                 />
                             </View>
                             <Text style={tw`text-white text-xs mt-1`}>
                                 {
-                                    characterName.length > 15 ? characterName.slice(0,10) + '...' : characterName
+                                    person?.character.length > 15 ? person?.character.slice(0,10) + '...' : person?.character
                                 }
                             </Text>
                             <Text style={tw`text-neutral-400 text-xs mt-1`}>
                                 {
-                                    personName.length > 15 ? personName.slice(0,10) + '...' : personName
+                                    person?.original_name.length > 15 ? person?.original_name.slice(0,10) + '...' : person?.original_name
                                 }
                             </Text>
                         </TouchableOpacity>

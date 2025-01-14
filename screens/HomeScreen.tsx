@@ -12,9 +12,9 @@ import {fetchRatedMovies, fetchTrendingMovies, fetchUpcomingMovies} from "../api
 const ios = Platform.OS === 'ios';
 
 const App: React.FC = () => {
-    const [trending, setTrending] = useState([1, 2, 3]);
-    const [upcoming, setUpcoming] = useState([1, 2, 3]);
-    const [topRated, setTopRate] = useState([1, 2, 3]);
+    const [trending, setTrending] = useState([]);
+    const [upcoming, setUpcoming] = useState([]);
+    const [topRated, setTopRate] = useState([]);
     const navigation = useNavigation();
     const [loading, setLoading] = useState(true);
 
@@ -32,14 +32,12 @@ const App: React.FC = () => {
 
     const getUpComingMovies = async () => {
         const data = await fetchUpcomingMovies();
-        if (data && data.results) setTrending(data.results);
-        setLoading(false);
+        if (data && data.results) setUpcoming(data.results);
     }
 
     const getTopRatedMovies = async () => {
         const data = await fetchRatedMovies();
-        if (data && data.results) setTrending(data.results);
-        setLoading(false);
+        if (data && data.results) setTopRate(data.results);
     }
 
     return (

@@ -36,7 +36,6 @@ const MovieCard = ({ item, handleClick }) => {
         <TouchableWithoutFeedback onPress={() => handleClick(item)}>
             <View style={{ borderRadius: 24, overflow: 'hidden' }}>
                 <Image
-                    // source={require('../assets/imageMovie/imagePoster2.jpg')}
                     source={{uri: image500(item.poster_path)}}
                     style={{
                         width: width * 0.6,
